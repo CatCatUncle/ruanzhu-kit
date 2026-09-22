@@ -1,0 +1,20 @@
+{
+  "name": "ruanzhu-kit",
+  "version": "1.0.0",
+  "description": "中国软件著作权登记材料生成器：源码 → 页数写死的程序鉴别材料 PDF、说明书 PDF、在线表单填写清单。零依赖。",
+  "type": "module",
+  "bin": { "ruanzhu": "bin/ruanzhu.mjs" },
+  "exports": {
+    ".": "./lib/index.mjs",
+    "./paginate": "./lib/paginate.mjs",
+    "./collect": "./lib/collect.mjs",
+    "./render": "./lib/render.mjs"
+  },
+  "files": ["bin", "lib", "templates", "docs", "SKILL.md"],
+  "keywords": ["软著", "软件著作权", "copyright", "china", "pdf", "claude-skill", "agent-skill"],
+  "license": "MIT",
+  "engines": { "node": ">=18" },
+  "repository": { "type": "git", "url": "git+https://github.com/CatCatUncle/ruanzhu-kit.git" },
+  "homepage": "https://github.com/CatCatUncle/ruanzhu-kit#readme",
+  "scripts": { "test": "node test/run.mjs" }
+}

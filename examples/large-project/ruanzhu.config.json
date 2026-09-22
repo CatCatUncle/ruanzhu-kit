@@ -1,0 +1,37 @@
+{
+  "softwareName": "示例桌面办公助手软件V1.0",
+  "shortName": "示例助手",
+  "version": "V1.0",
+  "copyrightOwner": "（此处填营业执照全称或身份证姓名，一字不差）",
+  "applicantType": "company",
+  "completedAt": "2026年09月",
+  "publishedAt": "",
+  "sourceDir": ".",
+  "extensions": ["js", "mjs", "cjs", "ts", "css", "html"],
+  "exclude": [
+    "projects",
+    "eval",
+    "public",
+    "deploy",
+    "skills/*/examples",
+    "skills/*/assets"
+  ],
+  "excludeFiles": ["*.bundle.js", "*.vendor.js"],
+  "order": ["main.js", "server.js", "engines", "src", "lib", "scripts", "skills"],
+  "fileHeaders": true,
+  "linesPerPage": 50,
+  "manual": "ruanzhu/说明书.md",
+  "outDir": "ruanzhu/out",
+  "form": {
+    "devHardware": "Intel Core i7 处理器，16GB 内存，512GB 固态硬盘",
+    "runHardware": "x86/ARM 处理器，8GB 内存，2GB 可用磁盘空间",
+    "devOS": "Windows 11",
+    "devTools": "Node.js 22、Electron、Visual Studio Code、Git",
+    "runPlatform": "Windows 10 及以上 / macOS 12 及以上",
+    "runtimeSupport": "Node.js 18 及以上，Chromium 渲染引擎",
+    "purpose": "为个人与团队提供本机运行的自动化办公能力，通过自然语言指令驱动任务规划与文件产出",
+    "industries": "软件开发、企业办公、教育培训、咨询服务、内容生产",
+    "mainFunctions": "一、任务理解与规划。接收自然语言指令，解析出目标、约束与交付物形式，自动拆解为可执行的步骤序列，并在执行过程中根据中间结果调整计划。二、办公文档生成。支持生成演示文稿、文字文档、电子表格与网页四类交付物，产出可直接打开编辑的标准格式文件，而不是文本回复。三、技能扩展机制。以目录形式组织可插拔技能包，每个技能包含触发条件与操作规程，新增能力无需修改主程序代码。四、工具调用与外部连接。内置文件读写、命令执行、网页抓取、图像处理等工具，并支持连接第三方服务接口完成数据获取与消息推送。五、目标验收与自我修正。任务完成后依据预设判据校验产出物是否满足要求，未达标时自动重试或调整策略，并记录失败原因供后续参考。六、定时任务与消息推送。支持按周期触发任务，执行结果经即时通讯渠道推送，错过的周期可以补跑，内容无变化时不重复推送。七、分层记忆管理。区分会话内上下文与跨会话长期记忆，长期记忆写入前进行必要性判断，避免无关信息堆积影响后续判断。八、权限与安全控制。对文件访问范围与命令执行划分权限档位，名单外的操作在执行前需要用户确认。九、多任务并行执行。支持同时推进多个互不依赖的任务，各自维护独立的工作目录与中间产物，互不干扰。十、本地优先运行。全部数据与产出物保存在用户本机文件系统，不依赖服务端存储，支持主流桌面操作系统，并提供桌面客户端与命令行两种使用方式。",
+    "techFeatures": "采用可插拔技能目录与统一工具接口解耦能力与主程序，任务执行引入目标判据驱动的验收回路，全部数据在本机闭环。"
+  }
+}
