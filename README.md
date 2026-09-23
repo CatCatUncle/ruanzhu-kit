@@ -1,10 +1,31 @@
+<div align="center">
+
 # ruanzhu-kit
 
-中国软著（软件著作权）登记材料生成器。源码进去，**页数一页不差的 PDF** 出来。
+**中国软著登记材料生成器 —— 源码进去，页数一页不差的 PDF 出来**
+
+[![GitHub stars](https://img.shields.io/github/stars/CatCatUncle/ruanzhu-kit?style=social)](https://github.com/CatCatUncle/ruanzhu-kit/stargazers)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Node >= 18](https://img.shields.io/badge/node-%3E%3D18-339933?logo=node.js&logoColor=white)](package.json)
+[![Zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)](package.json)
+[![Claude Skill](https://img.shields.io/badge/Claude-Skill-D97757)](SKILL.md)
+
+一条命令出齐 **程序鉴别材料 PDF + 说明书 PDF + 在线表单填写清单**，<br>
+不装 Word、不拼页码、不怕页数漂移。
+
+[三分钟跑通](#-三分钟跑通) · [分页原理](#-分页是怎么算的) · [当 AI 技能用](#-当-ai-技能用) · [避坑清单](#️-别踩的坑) · [企业 AI 落地合作](#-关于作者--合作)
+
+<sub>🏢 企业 AI 落地 / FDE / Agent 项目合作 → <a href="mailto:contact@aijentra.com">contact@aijentra.com</a></sub>
+
+</div>
 
 > Generates a complete Chinese software-copyright (软著) registration package from a
 > source tree: a page-exact source-code PDF, a manual PDF, and a copy-paste checklist
-> for the online form. Plain Node, zero dependencies.
+> for the online form. Plain Node, zero dependencies. Works as a Claude Code / Agent SDK skill.
+
+> [!TIP]
+> 如果它帮你省下了一次「页数不对、整份重做」，点一下右上角的 ⭐ Star——
+> 让下一个被软著折腾的开发者也能搜到它。
 
 ```console
 $ ruanzhu source
@@ -19,11 +40,23 @@ $ ruanzhu source
 
 10 万行代码、2132 页排版，交上去的是 62 页：封面 + 前 30 页 + 说明页 + 后 30 页。
 
+## 💡 为什么要有它
+
 软著材料最麻烦的地方不是写，是**页数**。源程序超过 60 页只能交前连续 30 页 + 后连续 30 页，
 而 Word 排版导出的 PDF 页数会随版本、字体、打印机驱动漂——同一份稿子在两台机器上能差出十几页，
 一漂整份材料重做。这个工具在渲染之前就把每页装哪些行算死，出完再回读 PDF 数一遍页码。
 
-## 三分钟跑通
+| | 手工 Word 排版 | ruanzhu-kit |
+|---|---|---|
+| 页数 | 随字体、版本、打印驱动漂移 | 渲染前算死，出完回读 PDF 核验 |
+| 超长代码行 | 折行把页面撑破，一页变两页 | 按折行后的行高单位计算 |
+| 前 30 + 后 30 页 | 手动截取、手动插说明页 | 自动截取，自动写说明页（略去多少行） |
+| 混进依赖/构建产物 | 常见，行数虚高被驳回 | `count` 一步把可疑文件列在最前面 |
+| 表单「主要功能」字数 | 自己数 | 逐字段算字数，带校验 |
+| 依赖 | Word / WPS | Node 18+ 和一个 Chrome，**零 npm 依赖** |
+| AI 代办 | — | 自带 `SKILL.md`，说一句话让 agent 跑完 |
+
+## 🚀 三分钟跑通
 
 需要 Node 18+ 和 Chrome / Chromium / Edge 任一（`CHROME_PATH` 可指定路径）。
 
@@ -49,7 +82,7 @@ ruanzhu all --doc  # 两份 PDF + 表单清单 + 可编辑的 .doc 留存件
 （构建产物、评测数据、运行期生成的文件）基本都在前十行里现形——行数虚高是驳回的高频原因。
 看到不该进的，加进配置的 `exclude` / `excludeFiles` 再跑一次。
 
-## 它出的东西
+## 📦 它出的东西
 
 | 文件 | 传到哪 |
 |---|---|
@@ -60,7 +93,7 @@ ruanzhu all --doc  # 两份 PDF + 表单清单 + 可编辑的 .doc 留存件
 
 营业执照、权属证明这些「其他证明文件」得你自己准备。
 
-## 命令
+## ⌨️ 命令
 
 | 命令 | 作用 |
 |---|---|
@@ -74,7 +107,7 @@ ruanzhu all --doc  # 两份 PDF + 表单清单 + 可编辑的 .doc 留存件
 选项：`--doc` 同时出 Word 留存件，`--lines-per-page 60` 排密一点（默认 50，上限 66），
 `--out <dir>` 换输出目录。
 
-## 分页是怎么算的
+## 🧮 分页是怎么算的
 
 一行 300 字符的代码在 A4 上会折成 4 行。按「行数」切页，超长行必然把页面撑破；
 所以这里算的是**折行之后占几个行高单位**：
@@ -94,7 +127,7 @@ Courier New 9pt，字符宽 0.6em   → 每行 89 个字符（中文算 2 个）
 
 核心实现在 [`lib/paginate.mjs`](lib/paginate.mjs)，七十来行，可以单独拿走用。
 
-## 当 AI 技能用
+## 🤖 当 AI 技能用
 
 仓库根目录的 [`SKILL.md`](SKILL.md) 是给 AI agent 读的版本，用的是通用技能包格式
 （Claude Code / Claude Agent SDK 都认）。clone 到技能目录即可：
@@ -113,7 +146,7 @@ git clone https://github.com/CatCatUncle/ruanzhu-kit.git <OpenWorkBuddy 目录>/
 装完直接说「帮我准备这个项目的软著材料」，它会自己清点源码、出两份 PDF、核页数、算表单字数。
 不用 agent，直接敲命令行产出的材料完全一样。
 
-## 别踩的坑
+## ⚠️ 别踩的坑
 
 | 坑 | 后果 |
 |---|---|
@@ -127,16 +160,37 @@ git clone https://github.com/CatCatUncle/ruanzhu-kit.git <OpenWorkBuddy 目录>/
 字段逐项怎么措辞见 [`docs/form-fields.md`](docs/form-fields.md)，
 大型项目的配置怎么写见 [`examples/large-project/`](examples/large-project/)。
 
-## 说明
+## 📌 说明
 
 这是个排版和清点工具，不是法律意见。材料能不能过审取决于你项目本身和审查员，
 提交前请自己核对一遍著作权人、源程序量和证明文件。规则以
 [中国版权保护中心](https://register.ccopyright.com.cn/)公布的为准。
 
-## 开发
+## 🛠️ 开发
 
 ```bash
 node test/run.mjs   # 17 项自测，最后两项会真的出一份 PDF 再回读页数
 ```
 
-MIT License.
+欢迎提 Issue 和 PR：遇到被驳回的新原因、表单字段有变化、某种语言的源码统计不准，都可以直接开 Issue 说。
+
+## ⭐ Star History
+
+如果这个项目对你有用，一个 Star 就是最好的支持。
+
+[![Star History Chart](https://api.star-history.com/svg?repos=CatCatUncle/ruanzhu-kit&type=Date)](https://star-history.com/#CatCatUncle/ruanzhu-kit&Date)
+
+## 👋 关于作者 · 合作
+
+前大厂 Agent 工程师，有丰富的 Agent 落地实践经验。
+
+- ✔️ 服务过跨境电商、制造业、AI 初创、私募金融机构、消费品巨头、国央企等客户的 AI 解决方案
+- ✔️ 企业 AI 内训 ｜ 企业私有化部署 ｜ 行业智能体 ｜ AI 数字化全案 ｜ AI 搜索优化 ｜ Agent 项目落地
+
+常驻深圳，欢迎前来交流和考察。
+
+**FDE（驻场工程）、Agent 项目落地及其他企业 AI 业务合作，请直接邮件联系：[contact@aijentra.com](mailto:contact@aijentra.com)**
+
+## 📄 License
+
+[MIT](LICENSE)
