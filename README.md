@@ -5,6 +5,7 @@
 **中国软著登记材料生成器 —— 源码进去，页数一页不差的 PDF 出来**
 
 [![GitHub stars](https://img.shields.io/github/stars/CatCatUncle/ruanzhu-kit?style=social)](https://github.com/CatCatUncle/ruanzhu-kit/stargazers)
+[![test](https://github.com/CatCatUncle/ruanzhu-kit/actions/workflows/test.yml/badge.svg)](https://github.com/CatCatUncle/ruanzhu-kit/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Node >= 18](https://img.shields.io/badge/node-%3E%3D18-339933?logo=node.js&logoColor=white)](package.json)
 [![Zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)](package.json)
@@ -12,6 +13,8 @@
 
 一条命令出齐 **程序鉴别材料 PDF + 说明书 PDF + 在线表单填写清单**，<br>
 不装 Word、不拼页码、不怕页数漂移。
+
+**中文** · [English](README_EN.md)
 
 [三分钟跑通](#-三分钟跑通) · [分页原理](#-分页是怎么算的) · [当 AI 技能用](#-当-ai-技能用) · [避坑清单](#️-别踩的坑) · [企业 AI 落地合作](#-关于作者--合作)
 
@@ -40,6 +43,11 @@ $ ruanzhu source
 
 10 万行代码、2132 页排版，交上去的是 62 页：封面 + 前 30 页 + 说明页 + 后 30 页。
 
+<p align="center">
+  <img src="docs/img/preview.png" alt="生成的程序鉴别材料：封面、带页眉页码的正文页、自动写的说明页、末页" width="100%">
+  <br><sub>真实产出（拿 npm CLI 的公开源码跑的）：封面 → 正文页眉带软件名称和版本号、右上角页码 1–60 连续 → 自动写的说明页 → 末页</sub>
+</p>
+
 ## 💡 为什么要有它
 
 软著材料最麻烦的地方不是写，是**页数**。源程序超过 60 页只能交前连续 30 页 + 后连续 30 页，
@@ -50,6 +58,7 @@ $ ruanzhu source
 |---|---|---|
 | 页数 | 随字体、版本、打印驱动漂移 | 渲染前算死，出完回读 PDF 核验 |
 | 超长代码行 | 折行把页面撑破，一页变两页 | 按折行后的行高单位计算 |
+| 页眉页码 | 手动插，封面、说明页还得单独处理 | 每页页眉自动写软件名称和版本号，正文页码 1–60 连续 |
 | 前 30 + 后 30 页 | 手动截取、手动插说明页 | 自动截取，自动写说明页（略去多少行） |
 | 混进依赖/构建产物 | 常见，行数虚高被驳回 | `count` 一步把可疑文件列在最前面 |
 | 表单「主要功能」字数 | 自己数 | 逐字段算字数，带校验 |
@@ -58,7 +67,7 @@ $ ruanzhu source
 
 ## 🚀 三分钟跑通
 
-需要 Node 18+ 和 Chrome / Chromium / Edge 任一（`CHROME_PATH` 可指定路径）。
+需要 Node 18+ 和 Chrome / Chromium / Edge 任一，版本 131 以上（页眉页码要用）；`CHROME_PATH` 可指定路径。
 
 ```bash
 cd 你的项目
@@ -121,6 +130,9 @@ Courier New 9pt，字符宽 0.6em   → 每行 89 个字符（中文算 2 个）
 每一行先算出占几个单位，累加到 50 就换页，分页点用 `page-break-after` 钉死，
 再交给 Chrome 无头模式渲染。页数在生成之前就是确定的。
 
+页眉（软件名称 + 版本号）和右上角页码放在 CSS `@page` 的页边距里，不占正文高度，
+所以加了页眉也不影响每页行数。封面和说明页不出页眉、不计页码，正文页码是连续的 1–60。
+
 超过 60 页的项目取**整份源程序的前 30 页和最后 30 页**，中间插一页说明页写清略去多少行——
 注意不是「把源码对半分再各凑 30 页」，那样代码量一大每页会被撑到几百行。
 成品是 62 页：封面 1 + 前 30 + 说明页 1 + 后 30。
@@ -169,10 +181,10 @@ git clone https://github.com/CatCatUncle/ruanzhu-kit.git <OpenWorkBuddy 目录>/
 ## 🛠️ 开发
 
 ```bash
-node test/run.mjs   # 17 项自测，最后两项会真的出一份 PDF 再回读页数
+node test/run.mjs   # 19 项自测，最后两项会真的出一份 PDF，回读页数、页眉和页码
 ```
 
-欢迎提 Issue 和 PR：遇到被驳回的新原因、表单字段有变化、某种语言的源码统计不准，都可以直接开 Issue 说。
+欢迎提 Issue 和 PR。**材料被驳回或要求补正了**，请用[「被驳回 / 补正了」模板](https://github.com/CatCatUncle/ruanzhu-kit/issues/new?template=rejected.yml)把原因贴上来——每一条都会变成下一版的自检项。表单字段有变化、某种语言的源码统计不准，也直接开 Issue。
 
 ## ⭐ Star History
 

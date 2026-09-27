@@ -1,0 +1,23 @@
+name: 报错 / 页数不对
+description: 命令报错、核验不通过、PDF 页数或页眉不对
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: 跑了什么命令，看到了什么
+      description: 把终端输出整段贴上来（核验那几行最有用）
+      render: console
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: 环境
+      placeholder: macOS 15 / Node 22 / Chrome 140
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 你期望的结果

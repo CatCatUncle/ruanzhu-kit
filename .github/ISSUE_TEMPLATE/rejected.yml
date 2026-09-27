@@ -1,0 +1,29 @@
+name: 被驳回 / 补正了
+description: 用这个工具出的材料被版权中心驳回或要求补正，把原因告诉我们，帮下一个人避坑
+labels: [驳回反馈]
+body:
+  - type: textarea
+    id: reason
+    attributes:
+      label: 补正通知书上的原话
+      description: 照抄驳回或补正的理由，涉及公司名、软件名的地方可以打码
+    validations:
+      required: true
+  - type: dropdown
+    id: part
+    attributes:
+      label: 问题出在哪份材料
+      options: [程序鉴别材料（源程序 PDF）, 文档鉴别材料（说明书 PDF）, 在线表单字段, 证明文件, 不确定]
+    validations:
+      required: true
+  - type: input
+    id: when
+    attributes:
+      label: 提交时间（年月）
+      placeholder: 2026年09月
+  - type: textarea
+    id: config
+    attributes:
+      label: 当时的 ruanzhu.config.json（可选）
+      description: 删掉著作权人等敏感字段再贴
+      render: json

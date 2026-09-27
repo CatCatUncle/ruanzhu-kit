@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 企业 AI 落地 / FDE / Agent 项目合作
+    url: mailto:contact@aijentra.com
+    about: 商务合作请直接发邮件，不要开 Issue

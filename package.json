@@ -1,6 +1,6 @@
 {
   "name": "ruanzhu-kit",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "中国软件著作权登记材料生成器：源码 → 页数写死的程序鉴别材料 PDF、说明书 PDF、在线表单填写清单。零依赖。",
   "type": "module",
   "bin": { "ruanzhu": "bin/ruanzhu.mjs" },

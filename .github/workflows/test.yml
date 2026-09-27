@@ -1,0 +1,21 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [18, 20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      # 端到端测试要回读 PDF 的逐页文字（页眉、页码、说明页位置），靠 poppler 的 pdftotext
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils fonts-noto-cjk
+      - run: node test/run.mjs

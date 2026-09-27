@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 
 import { collect } from '../lib/collect.mjs';
 import { splitForSubmission, findOverlongLines, paginate } from '../lib/paginate.mjs';
-import { pageMetrics, renderSourceHtml, renderManualHtml, htmlToPdf, htmlToDoc } from '../lib/render.mjs';
+import { pageMetrics, headerLabel, renderSourceHtml, renderManualHtml, htmlToPdf, htmlToDoc } from '../lib/render.mjs';
 import { markdownToHtml } from '../lib/markdown.mjs';
 import { verifySourcePdf, pdfPageCount } from '../lib/verify.mjs';
 import { loadConfig, saveConfig, DEFAULTS, CONFIG_NAME, SHORT_FIELDS, LONG_FIELDS, charCount } from '../lib/config.mjs';
@@ -161,7 +161,7 @@ function cmdSource(config, opts) {
   console.log(c.ok('已生成 ') + pdfPath);
   if (opts.doc) console.log(c.ok('已生成 ') + htmlToDoc(html, path.join(outDir, `${config.shortName}源程序.doc`)));
 
-  const result = verifySourcePdf(pdfPath, p.split);
+  const result = verifySourcePdf(pdfPath, { ...p.split, header: headerLabel(config) });
   console.log(c.b('\n核验'));
   for (const chk of result.checks) {
     console.log(`  ${chk.ok ? c.ok('✓') : c.bad('✗')} ${pad(chk.name, 20)} ${c.dim(chk.detail)}`);

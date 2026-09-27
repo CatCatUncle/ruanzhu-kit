@@ -8,9 +8,9 @@ import path from 'node:path';
 
 import { displayWidth, wrapUnits, paginate, splitForSubmission, findOverlongLines } from '../lib/paginate.mjs';
 import { collect, orderFiles } from '../lib/collect.mjs';
-import { pageMetrics, renderSourceHtml, renderManualHtml, htmlToPdf, findChrome } from '../lib/render.mjs';
+import { pageMetrics, headerLabel, renderSourceHtml, renderManualHtml, htmlToPdf, findChrome } from '../lib/render.mjs';
 import { markdownToHtml } from '../lib/markdown.mjs';
-import { pdfPageCount } from '../lib/verify.mjs';
+import { pdfPageCount, pdfPages, verifySourcePdf } from '../lib/verify.mjs';
 import { charCount } from '../lib/config.mjs';
 
 let passed = 0, failed = 0;
@@ -128,6 +128,18 @@ test('中文按字符数算，连续空白折成一个', () => {
   assert.equal(charCount('  中文  abc '), 6); // 中 文 空格 a b c
 });
 
+console.log('\n页眉');
+
+test('页眉是软件名称 + 版本号，名称里带了版本号就不重复', () => {
+  assert.equal(headerLabel({ softwareName: '测试软件V1.0', version: 'V1.0' }), '测试软件V1.0');
+  assert.equal(headerLabel({ softwareName: '测试软件', version: 'V1.0' }), '测试软件 V1.0');
+});
+
+test('软件名里的引号和反斜杠不会弄坏页眉样式', () => {
+  const html = renderSourceHtml({ mode: 'full', front: [['x']], back: [] }, { softwareName: '测"试\\软件', version: 'V1.0', copyrightOwner: '甲', completedAt: '2026年09月', linesPerPage: 50 }, pageMetrics());
+  assert.ok(html.includes('content: "测\\"试\\\\软件 V1.0"'));
+});
+
 console.log('\n端到端出 PDF');
 
 let chrome = null;
@@ -144,6 +156,16 @@ if (!chrome) {
     const out = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'ruanzhu-pdf-')), 'src.pdf');
     htmlToPdf(renderSourceHtml(split, config, pageMetrics()), out);
     assert.equal(pdfPageCount(out), 62);
+    if (pdfPages(out)) {
+      // 封面、说明页不出页眉；正文页眉带软件名，页码 1–60 连续
+      const pages = pdfPages(out).map((t) => t.replace(/\s+/g, ''));
+      assert.ok(!pages[0].includes('第1页'));
+      assert.ok(pages[1].includes('测试软件V1.0') && pages[1].includes('第1页'));
+      assert.ok(pages[30].includes('第30页') && !/第\d+页/.test(pages[31]));
+      assert.ok(pages[32].includes('第31页') && pages[61].includes('第60页'));
+      const v = verifySourcePdf(out, { ...split, header: '测试软件V1.0' });
+      assert.ok(v.ok, JSON.stringify(v.checks));
+    }
     fs.rmSync(path.dirname(out), { recursive: true, force: true });
   });
 
@@ -153,6 +175,10 @@ if (!chrome) {
     const out = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'ruanzhu-pdf-')), 'manual.pdf');
     htmlToPdf(renderManualHtml(markdownToHtml(md), config), out);
     assert.ok(pdfPageCount(out) >= 11);
+    if (pdfPages(out)) {
+      const pages = pdfPages(out).map((t) => t.replace(/\s+/g, ''));
+      assert.ok(!pages[0].includes('第1页') && pages[1].includes('测试软件V1.0') && pages[1].includes('第1页'));
+    }
     fs.rmSync(path.dirname(out), { recursive: true, force: true });
   });
 }
