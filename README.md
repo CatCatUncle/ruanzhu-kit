@@ -16,19 +16,33 @@
 
 **中文** · [English](README_EN.md)
 
-[三分钟跑通](#-三分钟跑通) · [分页原理](#-分页是怎么算的) · [当 AI 技能用](#-当-ai-技能用) · [避坑清单](#️-别踩的坑) · [企业 AI 落地合作](#-关于作者--合作)
+[三分钟跑通](#-三分钟跑通) · [分页原理](#-分页是怎么算的) · [当 AI 技能用](#-当-ai-技能用) · [避坑清单](#️-别踩的坑) · [**企业 FDE 合作**](#-关于作者--合作)
 
-<sub>🏢 企业 AI 落地 / FDE / Agent 项目合作 → <a href="mailto:contact@aijentra.com">contact@aijentra.com</a></sub>
+<b>🤝 推荐搭配 <a href="https://github.com/CatCatUncle/openworkbuddy">OpenWorkBuddy</a> 使用 —— 最好用的本地开源 AI 办公 Agent</b><br>
+<sub>🏢 企业 FDE 驻场 / Agent 落地 / 私有化部署合作 → <a href="mailto:contact@aijentra.com"><b>contact@aijentra.com</b></a></sub>
 
 </div>
+
+> [!IMPORTANT]
+> ### 🤝 推荐搭配 [OpenWorkBuddy](https://github.com/CatCatUncle/openworkbuddy) 一起用
+>
+> **[OpenWorkBuddy](https://github.com/CatCatUncle/openworkbuddy) —— 最好用的本地开源 AI 办公 Agent。** 跑在你自己电脑上，说一句话，它自己规划、动手、验收，
+> 把 PPT / Word / Excel / 网页直接落到硬盘上；DeepSeek、通义千问、豆包、Claude、Ollama 都能接。
+>
+> - 🏢 **适合企业本地部署**：数据不出本机 / 内网，支持 Docker 一键部署
+> - 🛠️ **支持商用二次开发**：个人免费，企业商用与二次开发提供商业授权
+> - 🧩 **本仓库就是它的技能**：把 ruanzhu-kit 放进 OpenWorkBuddy 的 `skills/`，说一句「帮我准备这个项目的软著材料」，两份 PDF 和表单清单自动出齐
+>
+> 👉 **[github.com/CatCatUncle/openworkbuddy](https://github.com/CatCatUncle/openworkbuddy)** [![OpenWorkBuddy stars](https://img.shields.io/github/stars/CatCatUncle/openworkbuddy?style=social)](https://github.com/CatCatUncle/openworkbuddy/stargazers)
 
 > Generates a complete Chinese software-copyright (软著) registration package from a
 > source tree: a page-exact source-code PDF, a manual PDF, and a copy-paste checklist
 > for the online form. Plain Node, zero dependencies. Works as a Claude Code / Agent SDK skill.
 
 > [!TIP]
-> 如果它帮你省下了一次「页数不对、整份重做」，点一下右上角的 ⭐ Star——
-> 让下一个被软著折腾的开发者也能搜到它。
+> **⭐ 求一个 Star！** 如果它帮你省下了一次「页数不对、整份重做」，请给
+> **[ruanzhu-kit](https://github.com/CatCatUncle/ruanzhu-kit)** 和 **[OpenWorkBuddy](https://github.com/CatCatUncle/openworkbuddy)** 都点一下 Star——
+> 让下一个被软著和办公杂活折腾的人也能搜到它们。
 
 ```console
 $ ruanzhu source
@@ -148,7 +162,7 @@ Courier New 9pt，字符宽 0.6em   → 每行 89 个字符（中文算 2 个）
 git clone https://github.com/CatCatUncle/ruanzhu-kit.git ~/.claude/skills/ruanzhu-kit
 ```
 
-也可以放进 [OpenWorkBuddy](https://github.com/CatCatUncle/openworkbuddy)（一个跑在自己电脑上的
+**推荐**放进 [OpenWorkBuddy](https://github.com/CatCatUncle/openworkbuddy)（最好用的本地开源 AI 办公 Agent，跑在自己电脑上的
 AI 办公助理）的 `skills/` 目录，让它来跑：
 
 ```bash
@@ -188,9 +202,9 @@ node test/run.mjs   # 19 项自测，最后两项会真的出一份 PDF，回读
 
 ## ⭐ Star History
 
-如果这个项目对你有用，一个 Star 就是最好的支持。
+如果这个项目对你有用，**请给 [ruanzhu-kit](https://github.com/CatCatUncle/ruanzhu-kit) 和 [OpenWorkBuddy](https://github.com/CatCatUncle/openworkbuddy) 一起点个 Star**，这是对开源作者最好的支持。
 
-[![Star History Chart](https://api.star-history.com/svg?repos=CatCatUncle/ruanzhu-kit&type=Date)](https://star-history.com/#CatCatUncle/ruanzhu-kit&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=CatCatUncle/ruanzhu-kit,CatCatUncle/openworkbuddy&type=Date)](https://star-history.com/#CatCatUncle/ruanzhu-kit&CatCatUncle/openworkbuddy&Date)
 
 ## 👋 关于作者 · 合作
 
@@ -201,7 +215,14 @@ node test/run.mjs   # 19 项自测，最后两项会真的出一份 PDF，回读
 
 常驻深圳，欢迎前来交流和考察。
 
-**FDE（驻场工程）、Agent 项目落地及其他企业 AI 业务合作，请直接邮件联系：[contact@aijentra.com](mailto:contact@aijentra.com)**
+> [!IMPORTANT]
+> ## 🚀 我们承接企业 FDE（驻场工程）与 AI 落地项目
+>
+> - **FDE 驻场工程**：工程师进驻企业，把 Agent 从 Demo 做到真正上线、真正有人用
+> - **企业私有化部署**：OpenWorkBuddy 等 Agent 在企业内网落地，数据不出域
+> - **行业智能体 / Agent 项目定制开发**、**企业 AI 内训**、**AI 数字化全案**、**AI 搜索优化（GEO）**
+>
+> ### 📮 直接发邮件：**[contact@aijentra.com](mailto:contact@aijentra.com)**
 
 ## 📄 License
 

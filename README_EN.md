@@ -14,6 +14,18 @@
 
 </div>
 
+> [!IMPORTANT]
+> ### 🤝 Best used with [OpenWorkBuddy](https://github.com/CatCatUncle/openworkbuddy)
+>
+> **[OpenWorkBuddy](https://github.com/CatCatUncle/openworkbuddy) — the best local, open-source AI office agent.** It runs on your own machine, plans and does the work,
+> and hands you real PPTX / DOCX / XLSX / HTML files. Works with DeepSeek, Qwen, Doubao, Claude or Ollama.
+>
+> - 🏢 **Built for on-prem enterprise deployment** — data stays on your machine / intranet; Docker one-command deploy
+> - 🛠️ **Commercial use & custom development** — free for personal use; commercial licenses available for companies
+> - 🧩 **ruanzhu-kit is an OpenWorkBuddy skill** — drop it into `skills/` and just ask for the 软著 materials
+>
+> ⭐ **If this helps, please star both [ruanzhu-kit](https://github.com/CatCatUncle/ruanzhu-kit) and [OpenWorkBuddy](https://github.com/CatCatUncle/openworkbuddy).**
+
 Registering software copyright in China (with the Copyright Protection Center of China, CPCC) requires a
 source-code PDF: if your code runs longer than 60 pages you submit **the first 30 and the last 30 pages**,
 at no fewer than 50 lines per page, with the software name and version in every page header.
@@ -66,8 +78,15 @@ Former big-tech Agent engineer. AI solutions delivered for cross-border e-commer
 private-equity funds, consumer-goods leaders and state-owned enterprises — corporate AI training, private
 deployment, industry agents, AI search optimization (GEO) and Agent project delivery. Based in Shenzhen.
 
-**FDE / Agent delivery / enterprise AI engagements: [contact@aijentra.com](mailto:contact@aijentra.com)**
+> [!IMPORTANT]
+> ## 🚀 We take on enterprise FDE (Forward Deployed Engineering) and AI delivery projects
+>
+> - **FDE on-site engineering** — take agents from demo to production that people actually use
+> - **Private / on-prem deployment** of OpenWorkBuddy and other agents
+> - **Industry agents**, **custom Agent development**, **corporate AI training**, **AI search optimization (GEO)**
+>
+> ### 📮 Email: **[contact@aijentra.com](mailto:contact@aijentra.com)**
 
-If this saved you a redo, a ⭐ helps others find it.
+If this saved you a redo, please ⭐ **[ruanzhu-kit](https://github.com/CatCatUncle/ruanzhu-kit)** and **[OpenWorkBuddy](https://github.com/CatCatUncle/openworkbuddy)** — it helps others find them.
 
 MIT License.
