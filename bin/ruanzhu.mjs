@@ -11,6 +11,8 @@ import { splitForSubmission, findOverlongLines, paginate } from '../lib/paginate
 import { pageMetrics, headerLabel, renderSourceHtml, renderManualHtml, htmlToPdf, htmlToDoc } from '../lib/render.mjs';
 import { markdownToHtml } from '../lib/markdown.mjs';
 import { verifySourcePdf, pdfPageCount } from '../lib/verify.mjs';
+import { inferForm, INFERRED_FIELDS } from '../lib/form-infer.mjs';
+import { toneIssues } from '../lib/tone.mjs';
 import { loadConfig, saveConfig, DEFAULTS, CONFIG_NAME, SHORT_FIELDS, LONG_FIELDS, charCount } from '../lib/config.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -74,7 +76,7 @@ function cmdInit(dir) {
       shortName: path.basename(target),
       copyrightOwner: '（写营业执照全称或身份证姓名，一字不差）',
       completedAt: `${now.getFullYear()}年${String(now.getMonth() + 1).padStart(2, '0')}月`,
-      form: Object.fromEntries([...SHORT_FIELDS, ...LONG_FIELDS].map(([k]) => [k, ''])),
+      form: { ...Object.fromEntries([...SHORT_FIELDS, ...LONG_FIELDS].map(([k]) => [k, ''])), ...inferForm(target) },
     };
     delete tpl.projectDir;
     fs.writeFileSync(configPath, JSON.stringify(tpl, null, 2) + '\n', 'utf8');
@@ -93,7 +95,9 @@ function cmdInit(dir) {
 
   console.log(`
 下一步：
-  1. 把 ${CONFIG_NAME} 里的软件名称、著作权人、开发完成日期填准
+  1. 把 ${CONFIG_NAME} 里的软件名称、著作权人、开发完成日期填准；
+     form 里开发/运行环境六项已按这台机器和项目依赖填了初值，核对一下，
+     开发目的、面向行业、主要功能、技术特点四项读懂软件后自己写
   2. 跑 ${c.b('ruanzhu count')} 看看收进来的文件对不对，把不该收的加进 exclude
   3. 写 ${DEFAULTS.manual}，然后 ${c.b('ruanzhu all')}`);
 }
@@ -208,14 +212,23 @@ function cmdForm(config, opts) {
   const outPath = path.join(outDir, '表单填写清单.md');
 
   const langs = [...new Set(p.files.map((f) => LANGUAGES[path.extname(f.path).slice(1).toLowerCase()]).filter(Boolean))];
-  const f = config.form || {};
-  const cell = (v) => (v || '_待填_').replace(/\|/g, '\\|').replace(/\n+/g, ' ');
+  // 配置里空着的环境类字段用推断值补上，清单里标出来让人核对
+  const inferred = inferForm(config.projectDir);
+  const guessed = new Set(INFERRED_FIELDS.filter((k) => !(config.form || {})[k] && inferred[k]));
+  const f = { ...config.form };
+  for (const k of guessed) f[k] = inferred[k];
+  const tone = Object.fromEntries([...SHORT_FIELDS, ...LONG_FIELDS].map(([k]) => [k, toneIssues(f[k])]));
+
+  const cell = (v) => (v || '**没填**').replace(/\|/g, '\\|').replace(/\n+/g, ' ');
   const row = ([key, label, limit]) => {
     const v = f[key] || '';
     const n = charCount(v);
-    const status = !v ? '⬜ 待填' : n > limit ? `❌ 超 ${n - limit} 字` : `✅ ${n}/${limit}`;
+    const status = !v ? '❌ 没填' : n > limit ? `❌ 超 ${n - limit} 字` : `✅ ${n}/${limit}${guessed.has(key) ? ' · 自动推断，核对一下' : ''}`;
     return `| ${label} | ${cell(v)} | ${status} |`;
   };
+  const toneLines = [...SHORT_FIELDS, ...LONG_FIELDS]
+    .filter(([k]) => tone[k].length)
+    .map(([k, label]) => `- ${label}：${tone[k].map((t) => `「${t.word}」${t.hint}`).join('；')}`);
 
   const lines = [
     `# ${config.softwareName} 软著在线表单填写清单`,
@@ -259,10 +272,16 @@ function cmdForm(config, opts) {
     ...LONG_FIELDS.map(([key, label, min, max]) => {
       const v = f[key] || '';
       const n = charCount(v);
-      const status = !v ? '⬜ 待填' : n < min ? `❌ 少 ${min - n} 字` : n > max ? `❌ 超 ${n - max} 字` : '✅';
-      return `### ${label}（${min ? `${min}–${max}` : `≤${max}`} 字，当前 ${n} 字 ${status}）\n\n${v || '> 待填。主要功能分 6–9 条，每条「小标题 + 2–4 句」，覆盖：核心能力、扩展机制、容错、数据存储、跨平台。少于 500 字会被驳回。'}\n`;
+      const status = !v ? '❌ 没填' : n < min ? `❌ 少 ${min - n} 字` : n > max ? `❌ 超 ${n - max} 字` : '✅';
+      return `### ${label}（${min ? `${min}–${max}` : `≤${max}`} 字，当前 ${n} 字 ${status}）\n\n${v || (min ? '> **没填。** 照着软件的菜单一个个写：用户能做什么、点了之后发生什么。写法见 docs/form-fields.md。少于 500 字会被驳回。' : '> **没填。** 一两句话写这个软件在做法上和别人不一样的地方，别重复主要功能。')}\n`;
     }),
-    '## 五、上传材料',
+    '## 五、口吻检查',
+    '',
+    toneLines.length
+      ? '下面这些词句读着像套话或提纲，不影响受理，但换成大白话更像开发者自己填的：\n\n' + toneLines.join('\n')
+      : '没挑出套话和 Markdown 符号。',
+    '',
+    '## 六、上传材料',
     '',
     '| 上传栏位 | 文件 |',
     '|---|---|',
@@ -292,7 +311,9 @@ function cmdForm(config, opts) {
     ...[...SHORT_FIELDS, ...LONG_FIELDS].filter(([k]) => !f[k]).map(([, label]) => `${label} 未填`),
   ];
   if (problems.length) console.log(c.warn('待办：') + problems.join('、'));
-  return { outPath, problems, docLines: p.docLines };
+  if (guessed.size) console.log(c.dim(`自动推断了 ${guessed.size} 项开发/运行环境，清单里标了「核对一下」。`));
+  if (toneLines.length) console.log(c.warn('口吻：') + `${toneLines.length} 个字段有套话或 Markdown 符号，见清单第五节。`);
+  return { outPath, problems, toneCount: toneLines.length, docLines: p.docLines };
 }
 
 // ---------- all ----------
@@ -307,7 +328,8 @@ function cmdAll(config, opts) {
     [`程序鉴别材料 ${source.split.mode === 'excerpt' ? '62' : source.split.totalPages} 页`, source.verified],
     ['说明书页数真实非空壳', (manual.pages || 0) >= 8],
     [`源程序量三处一致（${form.docLines} 行）`, true],
-    ['表单字段字数全部合格', form.problems.length === 0],
+    ['表单字段全部填完、字数合格', form.problems.length === 0],
+    ['表单文字没有套话和 Markdown 符号', form.toneCount === 0],
     [`著作权人与证照一字不差：${config.copyrightOwner}`, null],
     ['材料里没有混入依赖、构建产物、运行期数据', null],
   ];

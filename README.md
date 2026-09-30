@@ -76,6 +76,8 @@ $ ruanzhu source
 | 前 30 + 后 30 页 | 手动截取、手动插说明页 | 自动截取，自动写说明页（略去多少行） |
 | 混进依赖/构建产物 | 常见，行数虚高被驳回 | `count` 一步把可疑文件列在最前面 |
 | 表单「主要功能」字数 | 自己数 | 逐字段算字数，带校验 |
+| 开发/运行环境六项 | 一项项自己想 | 按本机配置和项目依赖自动填好，核对即可 |
+| 表单一股 AI 味 | 「赋能」「一站式」审查员一眼看穿 | 口吻检查挑出套话和 Markdown 符号，照菜单写大白话 |
 | 依赖 | Word / WPS | Node 18+ 和一个 Chrome，**零 npm 依赖** |
 | AI 代办 | — | 自带 `SKILL.md`，说一句话让 agent 跑完 |
 
@@ -111,7 +113,7 @@ ruanzhu all --doc  # 两份 PDF + 表单清单 + 可编辑的 .doc 留存件
 |---|---|
 | `①程序鉴别材料_源程序前30页后30页_<软件名>.pdf` | 「程序鉴别材料」栏 |
 | `②文档鉴别材料_说明书_<软件名>.pdf` | 「文档鉴别材料」栏 |
-| `表单填写清单.md` | 在线表单逐字段复制，带字数校验 |
+| `表单填写清单.md` | 在线表单十项逐字段复制，带字数校验和口吻检查 |
 | `<软件名>源程序.doc` / `<软件名>说明书.doc` | `--doc` 产出，留存和改字用 |
 
 营业执照、权属证明这些「其他证明文件」得你自己准备。
@@ -124,7 +126,7 @@ ruanzhu all --doc  # 两份 PDF + 表单清单 + 可编辑的 .doc 留存件
 | `ruanzhu count` | 只统计，不出文件。核对文件清单用 |
 | `ruanzhu source` | 出程序鉴别材料 PDF，并回读核验页数 |
 | `ruanzhu manual` | 把 `说明书.md` 渲成文档鉴别材料 PDF |
-| `ruanzhu form` | 出表单填写清单，逐项算字数 |
+| `ruanzhu form` | 出表单填写清单：环境类字段自动补，逐项算字数，挑套话 |
 | `ruanzhu all` | 以上三样一起出，最后打一份自检清单 |
 
 选项：`--doc` 同时出 Word 留存件，`--lines-per-page 60` 排密一点（默认 50，上限 66），
@@ -169,7 +171,7 @@ AI 办公助理）的 `skills/` 目录，让它来跑：
 git clone https://github.com/CatCatUncle/ruanzhu-kit.git <OpenWorkBuddy 目录>/skills/ruanzhu-kit
 ```
 
-装完直接说「帮我准备这个项目的软著材料」，它会自己清点源码、出两份 PDF、核页数、算表单字数。
+装完直接说「帮我准备这个项目的软著材料」，它会自己清点源码、出两份 PDF、核页数，读懂项目把表单十项全部填满。
 不用 agent，直接敲命令行产出的材料完全一样。
 
 ## ⚠️ 别踩的坑
@@ -195,7 +197,7 @@ git clone https://github.com/CatCatUncle/ruanzhu-kit.git <OpenWorkBuddy 目录>/
 ## 🛠️ 开发
 
 ```bash
-node test/run.mjs   # 19 项自测，最后两项会真的出一份 PDF，回读页数、页眉和页码
+node test/run.mjs   # 23 项自测，最后两项会真的出一份 PDF，回读页数、页眉和页码
 ```
 
 欢迎提 Issue 和 PR。**材料被驳回或要求补正了**，请用[「被驳回 / 补正了」模板](https://github.com/CatCatUncle/ruanzhu-kit/issues/new?template=rejected.yml)把原因贴上来——每一条都会变成下一版的自检项。表单字段有变化、某种语言的源码统计不准，也直接开 Issue。

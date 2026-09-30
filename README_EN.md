@@ -55,7 +55,7 @@ npx github:CatCatUncle/ruanzhu-kit all     # both PDFs + a form checklist, then 
 |---|---|
 | `①程序鉴别材料_…pdf` | Source-code material: cover + first 30 pages + omission note + last 30 pages (62 pages) |
 | `②文档鉴别材料_…pdf` | User manual rendered from `说明书.md` |
-| `表单填写清单.md` | Copy-paste values for every online form field, with length checks |
+| `表单填写清单.md` | Copy-paste values for all ten online form fields: environment fields auto-filled from your machine and dependencies, length checks, and a plain-language check that flags boilerplate phrasing |
 
 ## Use it as an AI agent skill
 

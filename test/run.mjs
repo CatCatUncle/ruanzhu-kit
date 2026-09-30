@@ -12,6 +12,8 @@ import { pageMetrics, headerLabel, renderSourceHtml, renderManualHtml, htmlToPdf
 import { markdownToHtml } from '../lib/markdown.mjs';
 import { pdfPageCount, pdfPages, verifySourcePdf } from '../lib/verify.mjs';
 import { charCount } from '../lib/config.mjs';
+import { macosVersion, osName, inferForm } from '../lib/form-infer.mjs';
+import { toneIssues } from '../lib/tone.mjs';
 
 let passed = 0, failed = 0;
 const test = (name, fn) => {
@@ -138,6 +140,45 @@ test('页眉是软件名称 + 版本号，名称里带了版本号就不重复',
 test('软件名里的引号和反斜杠不会弄坏页眉样式', () => {
   const html = renderSourceHtml({ mode: 'full', front: [['x']], back: [] }, { softwareName: '测"试\\软件', version: 'V1.0', copyrightOwner: '甲', completedAt: '2026年09月', linesPerPage: 50 }, pageMetrics());
   assert.ok(html.includes('content: "测\\"试\\\\软件 V1.0"'));
+});
+
+console.log('\n表单');
+
+test('Darwin 内核号换算成 macOS 版本，Windows 按构建号分 10 / 11', () => {
+  assert.equal(macosVersion('20.1.0'), '11');
+  assert.equal(macosVersion('24.3.0'), '15');
+  assert.equal(macosVersion('25.2.0'), '26');
+  assert.equal(osName('win32', '10.0.19045'), 'Windows 10');
+  assert.equal(osName('win32', '10.0.22631'), 'Windows 11');
+});
+
+test('按依赖清单推断运行环境，六项都有值且不超 50 字', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'ruanzhu-infer-'));
+  fs.writeFileSync(path.join(dir, 'go.mod'), 'module x\n\ngo 1.22\n\nrequire (\n\tgithub.com/gin-gonic/gin v1.9.1\n\tgithub.com/jackc/pgx/v5 v5.5.0\n)\n');
+  const f = inferForm(dir);
+  assert.match(f.devTools, /Go 1\.22/);
+  assert.match(f.devTools, /GoLand/);
+  assert.match(f.runtimeSupport, /PostgreSQL/);
+  assert.match(f.runPlatform, /Linux/);
+  for (const k of ['devHardware', 'runHardware', 'devOS', 'devTools', 'runPlatform', 'runtimeSupport']) {
+    assert.ok(f[k] && charCount(f[k]) <= 50, `${k} = ${f[k]}`);
+  }
+  fs.rmSync(dir, { recursive: true, force: true });
+});
+
+test('口吻检查挑得出套话、提纲编号、Markdown 和同一开头', () => {
+  const words = toneIssues('一、智能管理。本软件旨在一站式赋能门店。**支持**会员。支持积分。支持导出。支持打印。').map((t) => t.word);
+  for (const w of ['赋能', '一站式', '旨在', '**']) assert.ok(words.includes(w), `没挑出 ${w}`);
+  assert.ok(words.some((w) => w.startsWith('一、')));
+  assert.ok(words.some((w) => w.startsWith('支持')));
+});
+
+test('平实的写法不被误报，示例配置本身是干净的', () => {
+  assert.deepEqual(toneIssues('本软件是一款门店会员管理软件。1、会员登记。顾客报手机号即可开卡。2、积分。每消费一元记一分。'), []);
+  const example = JSON.parse(fs.readFileSync(new URL('../examples/large-project/ruanzhu.config.json', import.meta.url), 'utf8'));
+  for (const [k, v] of Object.entries(example.form)) assert.deepEqual(toneIssues(v), [], k);
+  const n = charCount(example.form.mainFunctions);
+  assert.ok(n >= 500 && n <= 1300, `示例主要功能 ${n} 字`);
 });
 
 console.log('\n端到端出 PDF');
