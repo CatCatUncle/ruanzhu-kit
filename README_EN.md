@@ -38,6 +38,15 @@ count, cover, the omission-note page, headers and page numbers.
 
 ![Output preview](docs/img/preview.png)
 
+
+> [!WARNING]
+> **Write the manual and form descriptions yourself.** Since 2026 the application requires a handwritten, signed
+> declaration that the software was developed by people and that **no AI was used to write the code, the documents,
+> or the application materials**; a false declaration carries credit-blacklist and legal consequences. AI-written
+> manuals also tend to describe features the software does not have, which gets applications rejected.
+> The ruanzhu-kit CLI calls **no AI model**: it only collects sources, paginates, adds headers and page numbers,
+> counts lines and pages, and checks field lengths. Do not file projects that were written with AI.
+
 ## Quick start
 
 Requires Node 18+ and Chrome / Chromium / Edge 131+ (`CHROME_PATH` to override).
@@ -65,7 +74,8 @@ npx github:CatCatUncle/ruanzhu-kit all     # both PDFs + a form checklist, then 
 git clone https://github.com/CatCatUncle/ruanzhu-kit.git ~/.claude/skills/ruanzhu-kit
 ```
 
-Then just ask your agent to "prepare the 软著 materials for this project".
+Then ask your agent to "prepare the 软著 materials for this project". It runs the commands and checks the page counts;
+the manual and the descriptive form fields are left for you to write (see the warning above).
 
 ## Disclaimer
 

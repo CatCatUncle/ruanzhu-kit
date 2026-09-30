@@ -31,13 +31,28 @@
 >
 > - 🏢 **适合企业本地部署**：数据不出本机 / 内网，支持 Docker 一键部署
 > - 🛠️ **支持商用二次开发**：个人免费，企业商用与二次开发提供商业授权
-> - 🧩 **本仓库就是它的技能**：把 ruanzhu-kit 放进 OpenWorkBuddy 的 `skills/`，说一句「帮我准备这个项目的软著材料」，两份 PDF 和表单清单自动出齐
+> - 🧩 **本仓库就是它的技能**：把 ruanzhu-kit 放进 OpenWorkBuddy 的 `skills/`，说一句「帮我准备这个项目的软著材料」，清点、分页、排版、核页数这些机械活自动做完
 >
 > 👉 **[github.com/CatCatUncle/openworkbuddy](https://github.com/CatCatUncle/openworkbuddy)** [![OpenWorkBuddy stars](https://img.shields.io/github/stars/CatCatUncle/openworkbuddy?style=social)](https://github.com/CatCatUncle/openworkbuddy/stargazers)
 
 > Generates a complete Chinese software-copyright (软著) registration package from a
 > source tree: a page-exact source-code PDF, a manual PDF, and a copy-paste checklist
 > for the online form. Plain Node, zero dependencies. Works as a Claude Code / Agent SDK skill.
+
+> [!WARNING]
+> ### ✍️ 说明书和表单，建议人工填写
+>
+> 2026 年起软著对 AI 管得明显严了：申请材料里要**手抄并签字**一段声明——本软件确系人的独立开发，
+> **未使用 AI 开发编写代码、撰写文档或生成登记申请材料**。按申请表上的说法，声明失实会被记入失信名单，并承担相应法律责任。
+>
+> 另一方面，不同 AI 的水平差得很远，让 AI 代写的说明书和功能描述，常见的问题是写了软件里没有的功能、
+> 截图和文字对不上、满篇套话，这些本身就是驳回的风险。所以我们的建议是：
+>
+> - **说明书、表单里的「开发目的」「面向行业」「主要功能」「技术特点」，请本人照着软件亲手写**
+> - 本工具的命令行**不调用任何 AI 模型**，只做机械活：清点源码、按规定分页排版、加页眉页码、数行数、核页数、算字数
+> - 用 AI 写出来的项目，别签这份声明；拿不准的，先问中国版权保护中心或专业律师
+>
+> 更多原因见[下文](#️-别踩的坑)。
 
 > [!TIP]
 > **⭐ 求一个 Star！** 如果它帮你省下了一次「页数不对、整份重做」，请给
@@ -77,9 +92,9 @@ $ ruanzhu source
 | 混进依赖/构建产物 | 常见，行数虚高被驳回 | `count` 一步把可疑文件列在最前面 |
 | 表单「主要功能」字数 | 自己数 | 逐字段算字数，带校验 |
 | 开发/运行环境六项 | 一项项自己想 | 按本机配置和项目依赖自动填好，核对即可 |
-| 表单一股 AI 味 | 「赋能」「一站式」审查员一眼看穿 | 口吻检查挑出套话和 Markdown 符号，照菜单写大白话 |
+| 表单描述写成套话 | 「赋能」「一站式」审查员一眼看穿 | 你亲手写完，口吻检查帮你挑出套话和 Markdown 符号 |
 | 依赖 | Word / WPS | Node 18+ 和一个 Chrome，**零 npm 依赖** |
-| AI 代办 | — | 自带 `SKILL.md`，说一句话让 agent 跑完 |
+| 命令行代劳 | — | 自带 `SKILL.md`，agent 可以替你敲命令；说明书和表单描述仍由你写 |
 
 ## 🚀 三分钟跑通
 
@@ -100,6 +115,17 @@ git clone https://github.com/CatCatUncle/ruanzhu-kit.git && cd ruanzhu-kit && np
 
 ```bash
 ruanzhu count      # 先看清点到哪些文件、多少行、排版几页
+```
+
+接着**自己动手写两样东西**（工具只给骨架和写法，不替你写）：
+
+1. `ruanzhu/说明书.md`：照着软件实际界面，一章章补完骨架里的 `……`，截图用真实运行界面
+2. `ruanzhu.config.json` 的 `form`：开发/运行环境六项已按你的电脑和依赖预填，核对一下；
+   开发目的、面向行业、主要功能、技术特点四项自己写，写法见 [`docs/form-fields.md`](docs/form-fields.md)
+
+写完一起出：
+
+```bash
 ruanzhu all --doc  # 两份 PDF + 表单清单 + 可编辑的 .doc 留存件
 ```
 
@@ -171,7 +197,8 @@ AI 办公助理）的 `skills/` 目录，让它来跑：
 git clone https://github.com/CatCatUncle/ruanzhu-kit.git <OpenWorkBuddy 目录>/skills/ruanzhu-kit
 ```
 
-装完直接说「帮我准备这个项目的软著材料」，它会自己清点源码、出两份 PDF、核页数，读懂项目把表单十项全部填满。
+装完直接说「帮我准备这个项目的软著材料」，它会替你清点源码、出程序鉴别材料、核页数、算字数，
+**说明书和表单里的描述会留给你本人写**——原因见上面的[人工填写提醒](#️-说明书和表单建议人工填写)。
 不用 agent，直接敲命令行产出的材料完全一样。
 
 ## ⚠️ 别踩的坑
@@ -184,6 +211,8 @@ git clone https://github.com/CatCatUncle/ruanzhu-kit.git <OpenWorkBuddy 目录>/
 | 「开发该软件的操作系统」填成运行平台 | 逻辑矛盾。前者是你写代码用的系统 |
 | 「软件的主要功能」少于 500 字 | 驳回。工具会替你数 |
 | 公司申请缺权属证明 | 驳回。备《职务开发声明》或《著作权转让合同》 |
+| 让 AI 代写说明书或表单描述 | 和手抄的「未使用 AI」声明冲突；AI 编出软件里没有的功能，也会被驳回 |
+| 用 AI 写的代码去申请 | 同上，声明失实的后果落在申请人自己身上 |
 
 字段逐项怎么措辞见 [`docs/form-fields.md`](docs/form-fields.md)，
 大型项目的配置怎么写见 [`examples/large-project/`](examples/large-project/)。
