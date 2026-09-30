@@ -12,7 +12,7 @@ import { pageMetrics, headerLabel, renderSourceHtml, renderManualHtml, htmlToPdf
 import { markdownToHtml } from '../lib/markdown.mjs';
 import { pdfPageCount, pdfPages, verifySourcePdf } from '../lib/verify.mjs';
 import { charCount } from '../lib/config.mjs';
-import { macosVersion, osName, inferForm } from '../lib/form-infer.mjs';
+import { macosVersion, osName, cpuText, inferForm } from '../lib/form-infer.mjs';
 import { toneIssues } from '../lib/tone.mjs';
 
 let passed = 0, failed = 0;
@@ -150,6 +150,12 @@ test('Darwin 内核号换算成 macOS 版本，Windows 按构建号分 10 / 11',
   assert.equal(macosVersion('25.2.0'), '26');
   assert.equal(osName('win32', '10.0.19045'), 'Windows 10');
   assert.equal(osName('win32', '10.0.22631'), 'Windows 11');
+});
+
+test('CPU 型号去掉营销后缀，太长就只写核数', () => {
+  assert.equal(cpuText('Intel(R) Core(TM) i7-12700 CPU @ 2.10GHz', 20), 'Intel Core i7-12700 处理器');
+  assert.equal(cpuText('AMD EPYC 7763 64-Core Processor', 4), 'AMD EPYC 7763 处理器');
+  assert.equal(cpuText('Some Vendor Extremely Long Server Processor Model Name 9000', 8), '8 核处理器');
 });
 
 test('按依赖清单推断运行环境，六项都有值且不超 50 字', () => {
