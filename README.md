@@ -197,7 +197,7 @@ git clone https://github.com/CatCatUncle/ruanzhu-kit.git <OpenWorkBuddy 目录>/
 ## 🛠️ 开发
 
 ```bash
-node test/run.mjs   # 23 项自测，最后两项会真的出一份 PDF，回读页数、页眉和页码
+node test/run.mjs   # 24 项自测，最后两项会真的出一份 PDF，回读页数、页眉和页码
 ```
 
 欢迎提 Issue 和 PR。**材料被驳回或要求补正了**，请用[「被驳回 / 补正了」模板](https://github.com/CatCatUncle/ruanzhu-kit/issues/new?template=rejected.yml)把原因贴上来——每一条都会变成下一版的自检项。表单字段有变化、某种语言的源码统计不准，也直接开 Issue。
