@@ -36,7 +36,7 @@ drifted page means redoing the whole package.
 double-width CJK characters), renders with headless Chrome, then reads the PDF back to verify page
 count, cover, the omission-note page, headers and page numbers.
 
-![Output preview](docs/img/preview.png)
+![Output preview](docs/preview.png)
 
 
 > [!WARNING]
@@ -68,14 +68,21 @@ npx github:CatCatUncle/ruanzhu-kit all     # both PDFs + a form checklist, then 
 
 ## Use it as an AI agent skill
 
+For platforms limited to two directory levels, run `npm run pack:skill` and upload
+`../ruanzhu-kit.skill.zip`. It contains `SKILL.md` at the ZIP root, the two original Word templates, and
+helpers for filling them in WPS/Word before exporting PDF, with at most one directory below the root. Use
+`npm run pack:skill -- /path/to/ruanzhu-kit.skill.zip` to choose an output path.
+The GitHub source ZIP and repository-root URL also include nested GitHub workflow
+and issue-template directories; use the skill ZIP on strict importers.
+
 [`SKILL.md`](SKILL.md) follows the common agent-skill format (Claude Code, Claude Agent SDK):
 
 ```bash
 git clone https://github.com/CatCatUncle/ruanzhu-kit.git ~/.claude/skills/ruanzhu-kit
 ```
 
-Then ask your agent to "prepare the 软著 materials for this project". It runs the commands and checks the page counts;
-the manual and the descriptive form fields are left for you to write (see the warning above).
+Then ask your agent to fill the Word templates using your project details, source code, manual text and screenshots,
+and export PDF through WPS/Word. Missing content is requested from you rather than drafted automatically.
 
 ## Disclaimer
 

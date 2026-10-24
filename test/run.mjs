@@ -181,7 +181,7 @@ test('口吻检查挑得出套话、提纲编号、Markdown 和同一开头', ()
 
 test('平实的写法不被误报，示例配置本身是干净的', () => {
   assert.deepEqual(toneIssues('本软件是一款门店会员管理软件。1、会员登记。顾客报手机号即可开卡。2、积分。每消费一元记一分。'), []);
-  const example = JSON.parse(fs.readFileSync(new URL('../examples/large-project/ruanzhu.config.json', import.meta.url), 'utf8'));
+  const example = JSON.parse(fs.readFileSync(new URL('../examples/large-project.config.json', import.meta.url), 'utf8'));
   for (const [k, v] of Object.entries(example.form)) assert.deepEqual(toneIssues(v), [], k);
   const n = charCount(example.form.mainFunctions);
   assert.ok(n >= 500 && n <= 1300, `示例主要功能 ${n} 字`);

@@ -4,3 +4,7 @@ ruanzhu/out/
 out/
 *.pdf
 *.doc
+*.skill.zip
+
+!templates/source-template.doc
+!templates/manual-template.doc

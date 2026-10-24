@@ -73,7 +73,7 @@ $ ruanzhu source
 10 万行代码、2132 页排版，交上去的是 62 页：封面 + 前 30 页 + 说明页 + 后 30 页。
 
 <p align="center">
-  <img src="docs/img/preview.png" alt="生成的程序鉴别材料：封面、带页眉页码的正文页、自动写的说明页、末页" width="100%">
+  <img src="docs/preview.png" alt="生成的程序鉴别材料：封面、带页眉页码的正文页、自动写的说明页、末页" width="100%">
   <br><sub>真实产出（拿 npm CLI 的公开源码跑的）：封面 → 正文页眉带软件名称和版本号、右上角页码 1–60 连续 → 自动写的说明页 → 末页</sub>
 </p>
 
@@ -183,6 +183,29 @@ Courier New 9pt，字符宽 0.6em   → 每行 89 个字符（中文算 2 个）
 
 ## 🤖 当 AI 技能用
 
+### 上传到只支持两级目录的 Skill 平台
+
+在仓库目录运行：
+
+```bash
+npm run pack:skill
+```
+
+上传仓库旁生成的 `ruanzhu-kit.skill.zip`。ZIP 根目录直接包含 `SKILL.md`，
+其余文件最多是 `templates/文件`、`docs/文件` 这样的两级结构。
+也可以用 `npm run pack:skill -- /目标路径/ruanzhu-kit.skill.zip` 指定输出位置。
+
+**Skill 默认流程是填 Word 模板，再通过 WPS／Word 导出 PDF。**
+包内自带用户提供的源程序和使用说明书两份 `.doc` 原模板，以及模板位置说明和工作副本脚本。
+只填已有的实际资料，不自动代写正文；保留模板排版，替换示例源码与截图后检查并导出。
+原有命令行 HTML 渲染器仍可单独使用，不包含在这份模板 Skill 包中。
+
+不要上传 GitHub 的源码 ZIP，或在严格限制层级的平台直接导入仓库根链接：
+仓库中的 `.github/workflows/` 和 `.github/ISSUE_TEMPLATE/` 是 GitHub 管理配置，
+会触发目录层级限制。打包命令只收集模板工作流所需文件，并检查资源层级。
+
+### 本地安装
+
 仓库根目录的 [`SKILL.md`](SKILL.md) 是给 AI agent 读的版本，用的是通用技能包格式
 （Claude Code / Claude Agent SDK 都认）。clone 到技能目录即可：
 
@@ -197,9 +220,9 @@ AI 办公助理）的 `skills/` 目录，让它来跑：
 git clone https://github.com/CatCatUncle/ruanzhu-kit.git <OpenWorkBuddy 目录>/skills/ruanzhu-kit
 ```
 
-装完直接说「帮我准备这个项目的软著材料」，它会替你清点源码、出程序鉴别材料、核页数、算字数，
-**说明书和表单里的描述会留给你本人写**——原因见上面的[人工填写提醒](#️-说明书和表单建议人工填写)。
-不用 agent，直接敲命令行产出的材料完全一样。
+装完直接说「用这套模板填写我的软著材料，再导出 PDF」，并提供软件资料、源码、正文和截图。
+技能会打开 Word 工作副本填写，替换旧项目示例并核对排版，再从 WPS／Word 导出 PDF；
+没有提供的正文先留给你补充，不自动代写。命令行生成器是另一种独立使用方式。
 
 ## ⚠️ 别踩的坑
 
@@ -215,7 +238,7 @@ git clone https://github.com/CatCatUncle/ruanzhu-kit.git <OpenWorkBuddy 目录>/
 | 用 AI 写的代码去申请 | 同上，声明失实的后果落在申请人自己身上 |
 
 字段逐项怎么措辞见 [`docs/form-fields.md`](docs/form-fields.md)，
-大型项目的配置怎么写见 [`examples/large-project/`](examples/large-project/)。
+大型项目的配置怎么写见 [`examples/large-project.md`](examples/large-project.md)。
 
 ## 📌 说明
 

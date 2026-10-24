@@ -1,10 +1,10 @@
 # 示例：十万行以上的项目怎么配
 
 代码量一大，`exclude` 写不写、怎么写，直接决定材料是「一翻就露馅」还是「一条主线读下来」。
-这里的 `ruanzhu.config.json` 是一份填完整的配置，照着改自己的。
+同目录的 [`large-project.config.json`](large-project.config.json) 是一份填完整的配置，照着改自己的。
 
 ```bash
-cp ruanzhu.config.json 你的项目/
+cp examples/large-project.config.json 你的项目/ruanzhu.config.json
 cd 你的项目
 npx github:CatCatUncle/ruanzhu-kit count      # 先看清点对不对
 npx github:CatCatUncle/ruanzhu-kit all --doc  # 出全套

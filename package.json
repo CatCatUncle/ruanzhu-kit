@@ -10,11 +10,14 @@
     "./collect": "./lib/collect.mjs",
     "./render": "./lib/render.mjs"
   },
-  "files": ["bin", "lib", "templates", "docs", "SKILL.md"],
+  "files": ["bin", "lib", "templates", "docs", "examples", "scripts", "SKILL.md"],
   "keywords": ["软著", "软件著作权", "copyright", "china", "pdf", "claude-skill", "agent-skill"],
   "license": "MIT",
   "engines": { "node": ">=18" },
   "repository": { "type": "git", "url": "git+https://github.com/CatCatUncle/ruanzhu-kit.git" },
   "homepage": "https://github.com/CatCatUncle/ruanzhu-kit#readme",
-  "scripts": { "test": "node test/run.mjs" }
+  "scripts": {
+    "test": "node test/run.mjs && node --test test/prepare-templates.mjs",
+    "pack:skill": "node scripts/pack-skill.mjs"
+  }
 }
