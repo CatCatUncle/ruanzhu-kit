@@ -29,6 +29,18 @@ function collect(relative) {
 }
 for (const resource of resources) collect(resource);
 
+// This importer requires bilingual metadata in addition to name/description.
+const skill = files.find((file) => file.name === 'SKILL.md').data.toString('utf8');
+const frontmatter = skill.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/)?.[1];
+if (!frontmatter) throw new Error('SKILL.md 缺少 YAML frontmatter');
+const required = ['name', 'description', 'version', 'display_name', 'display_name_en', 'description_zh', 'description_en'];
+for (const field of required) {
+  const raw = frontmatter.match(new RegExp(`^${field}:[ \\t]*(.*)$`, 'm'))?.[1].trim();
+  if (!raw || /^(?:""|''|null|~|\[\]|\{\}|#.*)$/i.test(raw)) {
+    throw new Error(`SKILL.md frontmatter 缺少非空字段：${field}`);
+  }
+}
+
 // Standard ZIP, stored without compression. No npm or system ZIP dependency.
 function crc32(data) {
   let crc = 0xffffffff;

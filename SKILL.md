@@ -1,5 +1,10 @@
 ---
 name: ruanzhu-kit
+version: "1.2.1"
+display_name: "软著模板填写与导出"
+display_name_en: "Software Copyright Template Filler"
+description_zh: "使用软著 Word 模板填入实际软件资料、源码、说明书和截图，保留原排版，经核对后通过 WPS 或 Word 导出 PDF，不自动代写正文。"
+description_en: "Fill software copyright Word templates with supplied project details, source code, manual text and screenshots, preserve formatting, and export PDF through WPS or Word after review. Does not draft missing content."
 description: 使用自带或用户指定的软著 Word 模板填写软件资料、真实源代码和说明书，在 WPS 或 Word 中保留原排版并导出 PDF。适用于软著模板填充、源码文档和使用手册整理，不自动编写申请正文。
 ---
 
